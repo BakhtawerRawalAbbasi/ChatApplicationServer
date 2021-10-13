@@ -1,0 +1,12 @@
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\bin\Debug\net5.0\DataAccessLayer.deps.json
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\bin\Debug\net5.0\DataAccessLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\bin\Debug\net5.0\ref\DataAccessLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\bin\Debug\net5.0\DataAccessLayer.pdb
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.AssemblyInfoInputs.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.AssemblyInfo.cs
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.csproj.CoreCompileInputs.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\ref\DataAccessLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.pdb
+C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.csproj.AssemblyReference.cache

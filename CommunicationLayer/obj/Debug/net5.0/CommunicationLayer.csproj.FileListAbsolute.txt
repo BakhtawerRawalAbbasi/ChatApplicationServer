@@ -1,0 +1,15 @@
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\bin\Debug\net5.0\CommunicationLayer.deps.json
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\bin\Debug\net5.0\CommunicationLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\bin\Debug\net5.0\ref\CommunicationLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\bin\Debug\net5.0\CommunicationLayer.pdb
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\bin\Debug\net5.0\Model.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\bin\Debug\net5.0\Model.pdb
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.csproj.AssemblyReference.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.AssemblyInfoInputs.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.AssemblyInfo.cs
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.csproj.CoreCompileInputs.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.csproj.CopyComplete
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\ref\CommunicationLayer.dll
+C:\Users\bakhtawar\source\repos\Server_Socket\CommunicationLayer\obj\Debug\net5.0\CommunicationLayer.pdb

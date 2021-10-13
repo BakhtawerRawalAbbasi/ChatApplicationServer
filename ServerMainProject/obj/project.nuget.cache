@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "vmq6B0uwCPOrVwxLMTjVdDd9cqqFUVq615iDqS4wqEiM7VkBU+OtH8tHQeWD2xC+RZ/Jvb9viDmewn8RiW0v/g==",
+  "success": false,
+  "projectFilePath": "C:\\Users\\bakhtawar\\source\\repos\\Server_Socket\\ServerMainProject\\ServerMainProject.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project CommunicationLayer is not compatible with net5.0 (.NETCoreApp,Version=v5.0). Project CommunicationLayer supports: net5.0-windows7.0 (.NETCoreApp,Version=v5.0)",
+      "libraryId": "CommunicationLayer",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    },
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project Model is not compatible with net5.0 (.NETCoreApp,Version=v5.0). Project Model supports: net5.0-windows7.0 (.NETCoreApp,Version=v5.0)",
+      "libraryId": "Model",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
+}

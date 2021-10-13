@@ -1,0 +1,5 @@
+C:\Users\bakhtawar\source\repos\Server_Socket\obj\Debug\net5.0\Server_Socket.csproj.AssemblyReference.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\obj\Debug\net5.0\Server_Socket.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bakhtawar\source\repos\Server_Socket\obj\Debug\net5.0\Server_Socket.AssemblyInfoInputs.cache
+C:\Users\bakhtawar\source\repos\Server_Socket\obj\Debug\net5.0\Server_Socket.AssemblyInfo.cs
+C:\Users\bakhtawar\source\repos\Server_Socket\obj\Debug\net5.0\Server_Socket.csproj.CoreCompileInputs.cache
