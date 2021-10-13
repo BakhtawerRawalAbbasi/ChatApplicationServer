@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace ConsoleApp1
 {
@@ -19,6 +20,8 @@ namespace ConsoleApp1
         RequesttoSignUP userRegistation = new RequesttoSignUP();
         UserLoginRequest userLogin = new UserLoginRequest();
         public string response;
+        DataTable dt = new DataTable();
+
         public ResponsetoSignUP RegistrationResponse
         {
             get { return signUpResp; }
@@ -53,16 +56,17 @@ namespace ConsoleApp1
             notifi = userNotification.UserRegistration(email, password,userName);
             return notifi;
         }
-        public  string UserList()
+        public  DataTable UserList()
         {
-            string notifi = null;
-
-            return notifi;
+            
+          
+            dt=userNotification.UserList();
+            return dt;
         }
         public void Server_SendLoginUser(string ClientId, string request)
         {
 
-            response = UserList();
+            dt = UserList();
         }
             public void Server_Send(string ClientId,object pp,string request)
         {

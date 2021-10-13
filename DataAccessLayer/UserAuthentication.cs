@@ -70,7 +70,7 @@ namespace DataAccessLayer
             }
         }
 
-        public string UserList()
+        public DataTable UserList()
         {
             try
             {
@@ -79,9 +79,15 @@ namespace DataAccessLayer
                 sqlCon.Open();
                 string query = $"Select UserName,EmailID FROM tbl_User";
                 SqlCommand sqlCmd = new SqlCommand(query, sqlCon);
-                sqlCmd.CommandType = CommandType.Text;
-                sqlCmd.ExecuteScalar();
-                return "succefull";
+                DataTable dt = new DataTable();
+              //  dt = json
+               sqlCmd.CommandType = CommandType.Text;
+                SqlDataAdapter da = new SqlDataAdapter(sqlCmd);
+                da.Fill(dt);
+               
+                //sqlCon.Close();
+               //dt= (DataTable)sqlCmd.ExecuteScalar();
+                return dt;
 
 
             }
