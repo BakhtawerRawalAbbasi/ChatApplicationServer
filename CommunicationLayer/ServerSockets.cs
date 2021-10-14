@@ -15,6 +15,7 @@ namespace Communication
         // Event of delegate 
         public event MessageReceived Mess_Rec;
 
+        public IDictionary<string, string> ClientIDEmail=new Dictionary<string, string>(); 
 
         public delegate void MessageType(string mess,NetMQSocketEventArgs e);
 
@@ -56,21 +57,22 @@ namespace Communication
         public  void Server_ReceiveReady(object sender, NetMQSocketEventArgs e)
         {
 
-            var clientMessage = e.Socket.ReceiveMultipartMessage(); 
+            var clientMessage = e.Socket.ReceiveMultipartMessage();
+           
             //PrintFrames("Server receiving", clientMessage);
             //if (clientMessage.FrameCount == 3)
-           //{
-               
-               //clientAddress = clientMessage[0];
-               // var clientMessageType = clientMessage[1];
-              //  var clientOriginalMessage = clientMessage[2];
-                // string response = string.Format("Message type {1} Message back from server {1}", clientMessageType,
-                //clientOriginalMessage);
-              //  var messageToClient = new NetMQMessage();
-              //  messageToClient.Append(clientAddress);
-             //   messageToClient.Append(clientMessageType);
-              //  messageToClient.Append(clientOriginalMessage);
-               OnReceivedMess(clientMessage[0].ConvertToString() ,clientMessage[2].Buffer , clientMessage[1].ConvertToString());
+            //{
+
+            //clientAddress = clientMessage[0];
+            // var clientMessageType = clientMessage[1];
+            //  var clientOriginalMessage = clientMessage[2];
+            // string response = string.Format("Message type {1} Message back from server {1}", clientMessageType,
+            //clientOriginalMessage);
+            //  var messageToClient = new NetMQMessage();
+            //  messageToClient.Append(clientAddress);
+            //   messageToClient.Append(clientMessageType);
+            //  messageToClient.Append(clientOriginalMessage);
+            OnReceivedMess(clientMessage[0].ConvertToString() ,clientMessage[2].Buffer , clientMessage[1].ConvertToString());
               // OnReceivedMessType(clientMessage[1].ConvertToString(),e);
           //if (clientMessage.FrameCount == 3)
             //    {
@@ -84,6 +86,10 @@ namespace Communication
 
         }
 
+        public void StoreClientIDEmail(string clientID,string EmailID)
+        {
+            ClientIDEmail.Add(clientID,EmailID);
+        }
         public class Response
         {
             public string email ;
@@ -99,11 +105,12 @@ namespace Communication
 
         public void Send(byte[] mess,string ClientId,string messType)
         {
-
+           
             var clientMessage = new NetMQMessage();
             clientMessage.Append(ClientId);
             clientMessage.Append(mess);
             clientMessage.Append(messType);
+           // clientMessage.Append(mess);
            server.SendMultipartMessage(clientMessage);
        }
 

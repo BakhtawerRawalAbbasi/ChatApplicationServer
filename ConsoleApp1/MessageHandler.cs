@@ -17,10 +17,12 @@ namespace ConsoleApp1
         public UserAuthentication userNotification = new UserAuthentication();
         private UserLoginResponse resp;
         private ResponsetoSignUP signUpResp ;
+        private ResponsetoListUser userLoginList;
         RequesttoSignUP userRegistation = new RequesttoSignUP();
         UserLoginRequest userLogin = new UserLoginRequest();
         public string response;
         DataTable dt = new DataTable();
+        List<User> responseUserList;
 
         public ResponsetoSignUP RegistrationResponse
         {
@@ -32,6 +34,12 @@ namespace ConsoleApp1
         {
             get { return resp; }
             set { resp = value; }
+        }
+
+        public ResponsetoListUser UserLogin
+        {
+            get { return userLoginList; }
+            set { userLoginList = value; }
         }
         public MessageHandler(DataCommunication obj)
         {
@@ -67,8 +75,22 @@ namespace ConsoleApp1
         {
 
             dt = UserList();
+
+            List<User> UserLoginList = new List<User>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                User user = new User();
+                user.EmailID = dt.Rows[i]["EmailID"].ToString();
+                user.UserName = dt.Rows[i]["UserName"].ToString();
+                UserLoginList.Add(user);
+            }
+
+            UserLogin = new ResponsetoListUser(UserLoginList);
+            obj1.DataSend<ResponsetoListUser>(UserLogin, ClientId, request);
+
+
         }
-            public void Server_Send(string ClientId,object pp,string request)
+        public void Server_Send(string ClientId,object pp,string request)
         {
             
             

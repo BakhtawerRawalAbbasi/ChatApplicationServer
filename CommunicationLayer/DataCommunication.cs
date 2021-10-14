@@ -46,6 +46,7 @@ namespace Communication
 
 
 
+
         public void Run()
 
         {
@@ -60,6 +61,7 @@ namespace Communication
             if (messType == "Login Request")
             {
                 UserLoginRequest pp = Deserialization.JsonDeserialize<UserLoginRequest>(mess);
+                obj.StoreClientIDEmail(ClientId,pp.Email);
                 OnReceivedMessType(ClientId, pp, messType);
             }
             else if (messType == "Registration")
