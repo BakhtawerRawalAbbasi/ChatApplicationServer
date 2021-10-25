@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using Model;
 
 namespace ConsoleApp1
 {
@@ -17,19 +18,27 @@ namespace ConsoleApp1
         public UserAuthentication userNotification = new UserAuthentication();
         private UserLoginResponse resp;
         private ResponsetoSignUP signUpResp ;
+        private ResponseSendMessage sendMessageResponse;
         private ResponsetoListUser userLoginList;
+        private ResponseOfHistoryMessages userhistorymessage;
+        private RequestToSendMess userMessage;
+        private SenderReceiverEmial userHistoryMessage;
         RequesttoSignUP userRegistation = new RequesttoSignUP();
         UserLoginRequest userLogin = new UserLoginRequest();
         public string response;
         DataTable dt = new DataTable();
         List<User> responseUserList;
-
+        string notifi = null;
         public ResponsetoSignUP RegistrationResponse
         {
             get { return signUpResp; }
             set { signUpResp = value; }
         }
-
+        public ResponseSendMessage SendMessageResponse
+        {
+            get { return sendMessageResponse; }
+            set { sendMessageResponse = value; }
+        }
         public UserLoginResponse Response
         {
             get { return resp; }
@@ -41,28 +50,47 @@ namespace ConsoleApp1
             get { return userLoginList; }
             set { userLoginList = value; }
         }
+
+        public ResponseOfHistoryMessages UserHistoryMessage
+        {
+            get { return userhistorymessage; }
+            set { userhistorymessage = value; }
+        }
         public MessageHandler(DataCommunication obj)
         {
             obj1 = obj;
             obj.Mess_Res += Server_Send;
             obj.Mess_CurrentLoginUser += Server_SendLoginUser;
 
-
-            //Response = new UserLoginResponse(response);
         }
        
         public string UserAuthentication(string email,string password)
         {
-           string notifi=null;
+        
            notifi= userNotification.UsersAuthentication(email, password);
            return notifi;
         }
 
         public string UserRegistration(string id,string email, string password,string userName)
         {
-            string notifi = null;
+           
             notifi = userNotification.UserRegistration(email, password,userName);
             return notifi;
+        }
+
+        public string UserMessage(string message, DateTime messagesendTime, string receiver_email, string sender_email)
+        {
+         
+            notifi = userNotification.UserMessage(message, messagesendTime, receiver_email, sender_email);
+            return notifi;
+        }
+
+        public DataTable HistoryMessages(string receiverEmailID,string sender_email)
+        {
+           
+            dt = userNotification.UserHistoryMessages(receiverEmailID, sender_email);
+            
+            return dt;
         }
         public  DataTable UserList()
         {
@@ -121,6 +149,31 @@ namespace ConsoleApp1
                 RegistrationResponse = new ResponsetoSignUP(response);
                 obj1.DataSend<ResponsetoSignUP>(RegistrationResponse, ClientId, request);
 
+            }
+            else if(request == "Send Message Request")
+            {
+                userMessage = (RequestToSendMess)pp;
+                response = UserMessage(userMessage.Message,userMessage.Messag_SendTime,userMessage.Receiver_Email_id,userMessage.Sender_Email_ID);
+                SendMessageResponse = new ResponseSendMessage(response);
+                obj1.DataSend<ResponseSendMessage>(SendMessageResponse, ClientId, request);
+            }
+            else if (request == "History of message")
+            {
+                userHistoryMessage = (SenderReceiverEmial)pp;
+                dt = HistoryMessages(userHistoryMessage.ReceiverEmailID,userHistoryMessage.SenderEmailID);
+                List<HistoryOfMessages> UserHistoryMessages = new List<HistoryOfMessages>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    HistoryOfMessages userMessages = new HistoryOfMessages();
+                    userMessages.Messages = dt.Rows[i]["Message"].ToString();
+                    userMessages.MessageSentTime = dt.Rows[i]["MessageSendTime"].ToString();
+                    userMessages.SenderEmail = dt.Rows[i]["Sender_Email"].ToString();
+
+                    UserHistoryMessages.Add(userMessages);
+                }
+                userhistorymessage = new ResponseOfHistoryMessages(UserHistoryMessages);
+                obj1.DataSend<ResponseOfHistoryMessages>(userhistorymessage, ClientId, request);
+     
             }
 
 

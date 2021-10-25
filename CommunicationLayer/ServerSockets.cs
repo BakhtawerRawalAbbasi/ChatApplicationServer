@@ -1,4 +1,5 @@
-﻿using NetMQ;
+﻿using Models;
+using NetMQ;
 using NetMQ.Sockets;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,8 @@ namespace Communication
 
         // Event of delegate 
         public event MessageReceived Mess_Rec;
-
-        public IDictionary<string, string> ClientIDEmail=new Dictionary<string, string>(); 
-
         public delegate void MessageType(string mess,NetMQSocketEventArgs e);
-
+        LoginUser userLogin;
         // Event of delegate 
         public event MessageType Mess_Res;
         NetMQPoller poller;
@@ -40,7 +38,7 @@ namespace Communication
             //how to route back the response message to the correct client socket.
 
             // poller = new NetMQPoller();
-            Response response = new Response();
+           // Response response = new Response();
             server = new RouterSocket("@tcp://127.0.0.1:5556");
             // raise event by method
             server.ReceiveReady += Server_ReceiveReady;
@@ -59,49 +57,34 @@ namespace Communication
 
             var clientMessage = e.Socket.ReceiveMultipartMessage();
            
-            //PrintFrames("Server receiving", clientMessage);
-            //if (clientMessage.FrameCount == 3)
-            //{
-
-            //clientAddress = clientMessage[0];
-            // var clientMessageType = clientMessage[1];
-            //  var clientOriginalMessage = clientMessage[2];
-            // string response = string.Format("Message type {1} Message back from server {1}", clientMessageType,
-            //clientOriginalMessage);
-            //  var messageToClient = new NetMQMessage();
-            //  messageToClient.Append(clientAddress);
-            //   messageToClient.Append(clientMessageType);
-            //  messageToClient.Append(clientOriginalMessage);
+            
             OnReceivedMess(clientMessage[0].ConvertToString() ,clientMessage[2].Buffer , clientMessage[1].ConvertToString());
-              // OnReceivedMessType(clientMessage[1].ConvertToString(),e);
-          //if (clientMessage.FrameCount == 3)
-            //    {
-              //     Server_Send("req", e);
-              //  }
-
-                // server.SendMultipartMessage(clientMessage);
-           // }
-
-            // Server_SendClient(response, e);
+              
 
         }
 
-        public void StoreClientIDEmail(string clientID,string EmailID)
-        {
-            ClientIDEmail.Add(clientID,EmailID);
-        }
-        public class Response
-        {
-            public string email ;
-            public string password;
+        //public void StoreClientIDEmail(string clientID,string EmailID,string messType)
+        //{
+           
+        //    ClientIDEmail.Add(clientID,EmailID);
+        //    clientEmail = ClientIDEmail.Values.ToList();
 
-            public Response()
-            {
-                email = "bakhtawer@nu.edu.pk";
-                password = "123";
-        }
-        }
+        //    List<UserStatus> UserLoginList = new List<UserStatus>();
+        //    for (int i = 0; i < clientEmail.Count; i++)
+        //    {
+        //        UserStatus userEmail = new UserStatus();
+        //        userEmail.EmailID =clientEmail[i];
+            
+        //        UserLoginList.Add(userEmail);
+        //    }
 
+        //    userLogin = new LoginUser(UserLoginList);
+        //    byte[] jsonString = Serialization.JsonSerializer(userLogin);
+
+        //    Send(jsonString,clientID,"Login User");
+
+        //}
+       
 
         public void Send(byte[] mess,string ClientId,string messType)
         {

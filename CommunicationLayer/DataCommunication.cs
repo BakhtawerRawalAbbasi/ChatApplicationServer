@@ -2,6 +2,8 @@
 using NetMQ;
 using NetMQ.Sockets;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Communication
 {
@@ -11,7 +13,9 @@ namespace Communication
 
         private ServerSockets obj;
 
-
+        public IDictionary<string, string> ClientIDEmail = new Dictionary<string, string>();
+        public List<string> clientEmail = new List<string> { };
+        LoginUser userLogin;
         public delegate void MessageType(string ClientId, object mess, string messType);
 
         // Event of delegate 
@@ -22,9 +26,16 @@ namespace Communication
 
         // Event of delegate 
         public event MessageCurrentUser Mess_CurrentLoginUser;
+        private UserStatus loginuser;
+      
+        public UserStatus LoginUserEmail
+        {
+            get { return loginuser; }
+            set { loginuser = value; }
+        }
         public DataCommunication()
         {
-
+            LoginUserEmail = new UserStatus();
 
             obj = new ServerSockets();
             obj.Mess_Rec += Mess_Received;
@@ -38,7 +49,7 @@ namespace Communication
             //Serialization serialize = new Serialization();
             byte[] jsonString = Serialization.JsonSerializer<T>(t);
             //Client_socket client = new Client_socket("2");
-            obj.Send(jsonString, ClientId,messType);
+            obj.Send(jsonString, ClientId, messType);
             // client.Mess_Received += Mess_Received;
 
         }
@@ -61,7 +72,27 @@ namespace Communication
             if (messType == "Login Request")
             {
                 UserLoginRequest pp = Deserialization.JsonDeserialize<UserLoginRequest>(mess);
-                obj.StoreClientIDEmail(ClientId,pp.Email);
+             
+                //obj.StoreClientIDEmail(ClientId, pp.Email, messType);
+                ClientIDEmail.Add(ClientId, pp.Email);
+                clientEmail = ClientIDEmail.Values.ToList();
+
+                List<UserStatus> UserLoginList = new List<UserStatus>();
+                for (int i = 0; i < clientEmail.Count; i++)
+                {
+                    UserStatus userEmail = new UserStatus();
+                    userEmail.EmailID = clientEmail[i];
+
+                    UserLoginList.Add(userEmail);
+                }
+
+                userLogin = new LoginUser(UserLoginList);
+                //byte[] jsonString = Serialization.JsonSerializer(userLogin);
+
+                //Send(jsonString, clientID, "Login User");
+
+
+                DataSend<LoginUser>(userLogin, ClientId, "Login User");
                 OnReceivedMessType(ClientId, pp, messType);
             }
             else if (messType == "Registration")
@@ -72,8 +103,19 @@ namespace Communication
 
             else if (messType == "Current User Login")
             {
-                
-                OnReceivedMessType(ClientId,  messType);
+
+                OnReceivedMessType(ClientId, messType);
+            }
+            else if (messType == "Send Message Request")
+            {
+                RequestToSendMess pp = Deserialization.JsonDeserialize<RequestToSendMess>(mess);
+                OnReceivedMessType(ClientId, pp, messType);
+            }
+
+            else if (messType == "History of message")
+            {
+                SenderReceiverEmial pp = Deserialization.JsonDeserialize<SenderReceiverEmial>(mess);
+                OnReceivedMessType(ClientId, pp, messType);
             }
 
             //  byte[] jsonString = Serialization.JsonSerializer<T>(t);

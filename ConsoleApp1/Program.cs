@@ -11,7 +11,6 @@ namespace ConsoleApp1
             MessageHandler message = new MessageHandler(communication);
             communication.Run();
           
-           // message.Run();
         }
     }
 }
