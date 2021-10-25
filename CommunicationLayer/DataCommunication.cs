@@ -13,7 +13,7 @@ namespace Communication
 
         private ServerSockets obj;
 
-        public IDictionary<string, string> ClientIDEmail = new Dictionary<string, string>();
+        public  IDictionary<string, string> ClientEmailID = new Dictionary<string, string>();
         public List<string> clientEmail = new List<string> { };
         LoginUser userLogin;
         public delegate void MessageType(string ClientId, object mess, string messType);
@@ -26,16 +26,10 @@ namespace Communication
 
         // Event of delegate 
         public event MessageCurrentUser Mess_CurrentLoginUser;
-        private UserStatus loginuser;
-      
-        public UserStatus LoginUserEmail
-        {
-            get { return loginuser; }
-            set { loginuser = value; }
-        }
+       
         public DataCommunication()
         {
-            LoginUserEmail = new UserStatus();
+           /// LoginUserEmail = new UserStatus();
 
             obj = new ServerSockets();
             obj.Mess_Rec += Mess_Received;
@@ -72,27 +66,14 @@ namespace Communication
             if (messType == "Login Request")
             {
                 UserLoginRequest pp = Deserialization.JsonDeserialize<UserLoginRequest>(mess);
-             
+
                 //obj.StoreClientIDEmail(ClientId, pp.Email, messType);
-                ClientIDEmail.Add(ClientId, pp.Email);
-                clientEmail = ClientIDEmail.Values.ToList();
-
-                List<UserStatus> UserLoginList = new List<UserStatus>();
-                for (int i = 0; i < clientEmail.Count; i++)
-                {
-                    UserStatus userEmail = new UserStatus();
-                    userEmail.EmailID = clientEmail[i];
-
-                    UserLoginList.Add(userEmail);
-                }
-
-                userLogin = new LoginUser(UserLoginList);
-                //byte[] jsonString = Serialization.JsonSerializer(userLogin);
-
-                //Send(jsonString, clientID, "Login User");
+                ClientEmailID.Add(pp.Email, ClientId);
+              
+                
 
 
-                DataSend<LoginUser>(userLogin, ClientId, "Login User");
+                //DataSend<LoginUser>(userLogin, ClientId, "Login User");
                 OnReceivedMessType(ClientId, pp, messType);
             }
             else if (messType == "Registration")

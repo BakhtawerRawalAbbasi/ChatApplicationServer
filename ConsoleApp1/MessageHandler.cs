@@ -17,16 +17,21 @@ namespace ConsoleApp1
         private DataCommunication obj1 ;
         public UserAuthentication userNotification = new UserAuthentication();
         private UserLoginResponse resp;
+        LoginUser userLoginEmail;
         private ResponsetoSignUP signUpResp ;
         private ResponseSendMessage sendMessageResponse;
         private ResponsetoListUser userLoginList;
         private ResponseOfHistoryMessages userhistorymessage;
         private RequestToSendMess userMessage;
+        public RequestToSendMess sendmessresponse { get; set; }
         private SenderReceiverEmial userHistoryMessage;
+        private ResponseSendMessage responseMessageSend;
         RequesttoSignUP userRegistation = new RequesttoSignUP();
         UserLoginRequest userLogin = new UserLoginRequest();
+        public List<string> clientEmail = new List<string> { };
         public string response;
         DataTable dt = new DataTable();
+       // public IDictionary<string, string> clientIDEmail = new Dictionary<string, string>();
         List<User> responseUserList;
         string notifi = null;
         public ResponsetoSignUP RegistrationResponse
@@ -44,7 +49,7 @@ namespace ConsoleApp1
             get { return resp; }
             set { resp = value; }
         }
-
+        
         public ResponsetoListUser UserLogin
         {
             get { return userLoginList; }
@@ -60,10 +65,18 @@ namespace ConsoleApp1
         {
             obj1 = obj;
             obj.Mess_Res += Server_Send;
+            LoginUserEmail = new UserStatus();
             obj.Mess_CurrentLoginUser += Server_SendLoginUser;
+        
 
         }
-       
+        private UserStatus loginuser;
+
+        public UserStatus LoginUserEmail
+        {
+            get { return loginuser; }
+            set { loginuser = value; }
+        }
         public string UserAuthentication(string email,string password)
         {
         
@@ -110,12 +123,32 @@ namespace ConsoleApp1
                 User user = new User();
                 user.EmailID = dt.Rows[i]["EmailID"].ToString();
                 user.UserName = dt.Rows[i]["UserName"].ToString();
+                user.Status = "Online";
                 UserLoginList.Add(user);
             }
 
             UserLogin = new ResponsetoListUser(UserLoginList);
+            //clientEmail = obj1.ClientEmailID.Values.ToList();
+
+          //  List<UserStatus> LoginUser = new List<UserStatus>();
+           // for (int i = 0; i < clientEmail.Count; i++)
+           // {
+                //UserStatus userEmail = new UserStatus();
+                //userEmail.EmailID = clientEmail[i];
+
+                //LoginUser.Add(userEmail);
+
+
+
+           // }
+
+            //userLoginEmail = new LoginUser(LoginUser);
             obj1.DataSend<ResponsetoListUser>(UserLogin, ClientId, request);
 
+
+            
+            
+            //obj1.DataSend<LoginUser>(userLoginEmail, ClientId, "Login User");
 
         }
         public void Server_Send(string ClientId,object pp,string request)
@@ -149,13 +182,36 @@ namespace ConsoleApp1
                 RegistrationResponse = new ResponsetoSignUP(response);
                 obj1.DataSend<ResponsetoSignUP>(RegistrationResponse, ClientId, request);
 
+                clientEmail = obj1.ClientEmailID.Values.ToList();
+
+                List<UserStatus> UserLoginList = new List<UserStatus>();
+                for (int i = 0; i < clientEmail.Count; i++)
+                {
+                    UserStatus userEmail = new UserStatus();
+                    userEmail.EmailID = clientEmail[i];
+
+                    UserLoginList.Add(userEmail);
+                }
+
+                userLoginEmail = new LoginUser(UserLoginList);
+                obj1.DataSend<LoginUser>(userLoginEmail, ClientId, "Login User");
+
             }
             else if(request == "Send Message Request")
             {
                 userMessage = (RequestToSendMess)pp;
-                response = UserMessage(userMessage.Message,userMessage.Messag_SendTime,userMessage.Receiver_Email_id,userMessage.Sender_Email_ID);
-                SendMessageResponse = new ResponseSendMessage(response);
-                obj1.DataSend<ResponseSendMessage>(SendMessageResponse, ClientId, request);
+                UserMessage(userMessage.Message,userMessage.Messag_SendTime,userMessage.Receiver_Email_id,userMessage.Sender_Email_ID);
+                if(obj1.ClientEmailID.ContainsKey(userMessage.Receiver_Email_id))
+                {
+                    string value;
+                    obj1.ClientEmailID.TryGetValue(userMessage.Receiver_Email_id,out value);
+                     ClientId = value;
+
+                    obj1.DataSend<RequestToSendMess>(userMessage, ClientId, "Message Receive Request");
+                }
+                
+
+              
             }
             else if (request == "History of message")
             {
