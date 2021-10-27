@@ -123,31 +123,33 @@ namespace ConsoleApp1
                 User user = new User();
                 user.EmailID = dt.Rows[i]["EmailID"].ToString();
                 user.UserName = dt.Rows[i]["UserName"].ToString();
-                user.Status = "Online";
+                if (obj1.ClientEmailID.ContainsKey(user.EmailID))
+                { user.Status = "online"; }
+                 else
+                    user.Status = "Ofline";
                 UserLoginList.Add(user);
             }
 
+
             UserLogin = new ResponsetoListUser(UserLoginList);
-            //clientEmail = obj1.ClientEmailID.Values.ToList();
-
-          //  List<UserStatus> LoginUser = new List<UserStatus>();
-           // for (int i = 0; i < clientEmail.Count; i++)
-           // {
-                //UserStatus userEmail = new UserStatus();
-                //userEmail.EmailID = clientEmail[i];
-
-                //LoginUser.Add(userEmail);
-
-
-
-           // }
-
+           
             //userLoginEmail = new LoginUser(LoginUser);
             obj1.DataSend<ResponsetoListUser>(UserLogin, ClientId, request);
+            //for(int i=0; i<UserLoginList.Count;i++ )
+            //{ 
+            //if (obj1.ClientEmailID.ContainsKey(UserLoginList.))
+            //{
+            ////    string value;
+            ////    obj1.ClientEmailID.TryGetValue(userMessage.Receiver_Email_id, out value);
+            ////    ClientId = value;
+
+            ////    obj1.DataSend<RequestToSendMess>(userMessage, ClientId, "Message Receive Request");
+            ////}
+
+            //}
 
 
-            
-            
+
             //obj1.DataSend<LoginUser>(userLoginEmail, ClientId, "Login User");
 
         }
@@ -201,13 +203,17 @@ namespace ConsoleApp1
             {
                 userMessage = (RequestToSendMess)pp;
                 UserMessage(userMessage.Message,userMessage.Messag_SendTime,userMessage.Receiver_Email_id,userMessage.Sender_Email_ID);
-                if(obj1.ClientEmailID.ContainsKey(userMessage.Receiver_Email_id))
+                SenderNewMessage.Instance.Message = userMessage.Message;
+                SenderNewMessage.Instance.SenderEmailID = userMessage.Sender_Email_ID;
+                SenderNewMessage.Instance.ReceiverEmailID = userMessage.Receiver_Email_id;
+                SenderNewMessage.Instance.MessageSendTime = userMessage.Messag_SendTime;
+                if (obj1.ClientEmailID.ContainsKey(userMessage.Receiver_Email_id))
                 {
                     string value;
                     obj1.ClientEmailID.TryGetValue(userMessage.Receiver_Email_id,out value);
                      ClientId = value;
 
-                    obj1.DataSend<RequestToSendMess>(userMessage, ClientId, "Message Receive Request");
+                    obj1.DataSend<SenderNewMessage>(SenderNewMessage.Instance, ClientId, "Message Receive Request");
                 }
                 
 
@@ -222,7 +228,7 @@ namespace ConsoleApp1
                 {
                     HistoryOfMessages userMessages = new HistoryOfMessages();
                     userMessages.Messages = dt.Rows[i]["Message"].ToString();
-                    userMessages.MessageSentTime = dt.Rows[i]["MessageSendTime"].ToString();
+                    userMessages.MessageSentTime = (DateTime)dt.Rows[i]["MessageSendTime"];
                     userMessages.SenderEmail = dt.Rows[i]["Sender_Email"].ToString();
 
                     UserHistoryMessages.Add(userMessages);
