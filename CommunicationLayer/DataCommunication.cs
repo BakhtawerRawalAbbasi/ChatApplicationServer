@@ -12,10 +12,7 @@ namespace Communication
 
 
         private ServerSockets obj;
-
         public  IDictionary<string, string> ClientEmailID = new Dictionary<string, string>();
-        public List<string> clientEmail = new List<string> { };
-        LoginUser userLogin;
         public delegate void MessageType(string ClientId, object mess, string messType);
 
         // Event of delegate 
@@ -40,18 +37,11 @@ namespace Communication
 
         public void DataSend<T>(T t, string ClientId,string messType)
         {
-            //Serialization serialize = new Serialization();
+           
             byte[] jsonString = Serialization.JsonSerializer<T>(t);
-            //Client_socket client = new Client_socket("2");
             obj.Send(jsonString, ClientId, messType);
-            // client.Mess_Received += Mess_Received;
 
         }
-
-
-
-
-
         public void Run()
 
         {
@@ -59,32 +49,34 @@ namespace Communication
             obj.Run();
         }
 
-
-
         public void Mess_Received(string ClientId, byte[] mess, string messType)
         {
             if (messType == "Login Request")
             {
                 UserLoginRequest pp = Deserialization.JsonDeserialize<UserLoginRequest>(mess);
+                bool keyExists = ClientEmailID.ContainsKey(pp.Email);
+                if (!keyExists)
+                {
+                    ClientEmailID.Add(pp.Email, ClientId);
+                }
+                else
+                {
+                    ClientEmailID.Remove(pp.Email);
+                    ClientEmailID.Add(pp.Email, ClientId);
 
-                //obj.StoreClientIDEmail(ClientId, pp.Email, messType);
-                ClientEmailID.Add(pp.Email, ClientId);
+                }
               
-                
-
-
-                //DataSend<LoginUser>(userLogin, ClientId, "Login User");
                 OnReceivedMessType(ClientId, pp, messType);
             }
             else if (messType == "Registration")
             {
                 RequesttoSignUP pp = Deserialization.JsonDeserialize<RequesttoSignUP>(mess);
+                ClientEmailID.Add(pp.Email, ClientId);
                 OnReceivedMessType(ClientId, pp, messType);
             }
 
             else if (messType == "Current User Login")
             {
-
                 OnReceivedMessType(ClientId, messType);
             }
             else if (messType == "Send Message Request")
@@ -99,11 +91,14 @@ namespace Communication
                 OnReceivedMessType(ClientId, pp, messType);
             }
 
-            //  byte[] jsonString = Serialization.JsonSerializer<T>(t);
+            else if (messType == "Request for Logout")
+            {
+                OnReceivedMessType(ClientId, messType);
+            }
+
         }
 
 
-        //protected virtual void OnReceivedMessType(string mess, NetMQSocketEventArgs e)
         protected virtual void OnReceivedMessType(string ClientId, object mess, string messType)
         {
 
@@ -129,22 +124,6 @@ namespace Communication
 
 
         }
-
-
-
-
-
-
-
-
-
-
-
-        //static void Main(string[] args)
-        // {
-
-
-        // }
 
     }
 }

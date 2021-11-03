@@ -16,9 +16,6 @@ namespace Communication
         // Event of delegate 
         public event MessageReceived Mess_Rec;
         public delegate void MessageType(string mess,NetMQSocketEventArgs e);
-        LoginUser userLogin;
-        // Event of delegate 
-        public event MessageType Mess_Res;
         NetMQPoller poller;
         RouterSocket server;
         public string response;
@@ -38,7 +35,6 @@ namespace Communication
             //how to route back the response message to the correct client socket.
 
             // poller = new NetMQPoller();
-           // Response response = new Response();
             server = new RouterSocket("@tcp://127.0.0.1:5556");
             // raise event by method
             server.ReceiveReady += Server_ReceiveReady;
@@ -55,36 +51,11 @@ namespace Communication
         public  void Server_ReceiveReady(object sender, NetMQSocketEventArgs e)
         {
 
-            var clientMessage = e.Socket.ReceiveMultipartMessage();
-           
-            
+            var clientMessage = e.Socket.ReceiveMultipartMessage(); 
             OnReceivedMess(clientMessage[0].ConvertToString() ,clientMessage[2].Buffer , clientMessage[1].ConvertToString());
               
 
         }
-
-        //public void StoreClientIDEmail(string clientID,string EmailID,string messType)
-        //{
-           
-        //    ClientIDEmail.Add(clientID,EmailID);
-        //    clientEmail = ClientIDEmail.Values.ToList();
-
-        //    List<UserStatus> UserLoginList = new List<UserStatus>();
-        //    for (int i = 0; i < clientEmail.Count; i++)
-        //    {
-        //        UserStatus userEmail = new UserStatus();
-        //        userEmail.EmailID =clientEmail[i];
-            
-        //        UserLoginList.Add(userEmail);
-        //    }
-
-        //    userLogin = new LoginUser(UserLoginList);
-        //    byte[] jsonString = Serialization.JsonSerializer(userLogin);
-
-        //    Send(jsonString,clientID,"Login User");
-
-        //}
-       
 
         public void Send(byte[] mess,string ClientId,string messType)
         {

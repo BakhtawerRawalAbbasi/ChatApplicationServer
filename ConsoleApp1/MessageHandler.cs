@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using Model;
+
 
 namespace ConsoleApp1
 {
    public class MessageHandler
     {
         private DataCommunication obj1 ;
-        public UserAuthentication userNotification = new UserAuthentication();
+        public DataManipulation userNotification = new DataManipulation();
         private UserLoginResponse resp;
         LoginUser userLoginEmail;
         private ResponsetoSignUP signUpResp ;
@@ -25,14 +25,11 @@ namespace ConsoleApp1
         private RequestToSendMess userMessage;
         public RequestToSendMess sendmessresponse { get; set; }
         private SenderReceiverEmial userHistoryMessage;
-        private ResponseSendMessage responseMessageSend;
         RequesttoSignUP userRegistation = new RequesttoSignUP();
         UserLoginRequest userLogin = new UserLoginRequest();
         public List<string> clientEmail = new List<string> { };
         public string response;
         DataTable dt = new DataTable();
-       // public IDictionary<string, string> clientIDEmail = new Dictionary<string, string>();
-        List<User> responseUserList;
         string notifi = null;
         public ResponsetoSignUP RegistrationResponse
         {
@@ -115,50 +112,61 @@ namespace ConsoleApp1
         public void Server_SendLoginUser(string ClientId, string request)
         {
 
-            dt = UserList();
-
-            List<User> UserLoginList = new List<User>();
-            for (int i = 0; i < dt.Rows.Count; i++)
+            if(request== "Current User Login")
             {
-                User user = new User();
-                user.EmailID = dt.Rows[i]["EmailID"].ToString();
-                user.UserName = dt.Rows[i]["UserName"].ToString();
-                if (obj1.ClientEmailID.ContainsKey(user.EmailID))
-                { user.Status = "online"; }
-                 else
-                    user.Status = "Ofline";
-                UserLoginList.Add(user);
+                dt = UserList();
+
+                List<User> UserLoginList = new List<User>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    User user = new User();
+                    user.EmailID = dt.Rows[i]["EmailID"].ToString();
+                    user.UserName = dt.Rows[i]["UserName"].ToString();
+                    if (obj1.ClientEmailID.ContainsKey(user.EmailID))
+                    {
+                        user.Status = "online";
+                    }
+                    else
+                        user.Status = "Ofline";
+                    UserLoginList.Add(user);
+                }
+
+
+                UserLogin = new ResponsetoListUser(UserLoginList);
+                clientEmail = obj1.ClientEmailID.Values.ToList();
+                for (int i = 0; i < clientEmail.Count; i++)
+                {
+
+                    ClientId = obj1.ClientEmailID.ElementAt(i).Value;
+                    obj1.DataSend<ResponsetoListUser>(UserLogin, ClientId, request);
+
+
+                }
+            }
+           else if(request == "Request for Logout")
+            {
+                for (int i = 0; i < clientEmail.Count; i++)
+                {
+
+                 string clientIdKey = obj1.ClientEmailID.ElementAt(i).Key;
+                 if(obj1.ClientEmailID.ElementAt(i).Value == ClientId)
+                 {
+                        obj1.ClientEmailID.Remove(clientIdKey);
+                        break;
+                 }
+                    
+
+                }
+
+      
+
             }
 
-
-            UserLogin = new ResponsetoListUser(UserLoginList);
-           
-            //userLoginEmail = new LoginUser(LoginUser);
-            obj1.DataSend<ResponsetoListUser>(UserLogin, ClientId, request);
-            //for(int i=0; i<UserLoginList.Count;i++ )
-            //{ 
-            //if (obj1.ClientEmailID.ContainsKey(UserLoginList.))
-            //{
-            ////    string value;
-            ////    obj1.ClientEmailID.TryGetValue(userMessage.Receiver_Email_id, out value);
-            ////    ClientId = value;
-
-            ////    obj1.DataSend<RequestToSendMess>(userMessage, ClientId, "Message Receive Request");
-            ////}
-
-            //}
-
-
-
-            //obj1.DataSend<LoginUser>(userLoginEmail, ClientId, "Login User");
 
         }
         public void Server_Send(string ClientId,object pp,string request)
         {
             
-            
-            
-         
             if (request == "Login Request")
             {
                 userLogin = (UserLoginRequest)pp;
@@ -177,28 +185,7 @@ namespace ConsoleApp1
 
             }
 
-            else if (request == "Current User Login")
-            {
-                userRegistation = (RequesttoSignUP)pp;
-                response = UserRegistration(ClientId, userRegistation.Email, userRegistation.Password, userRegistation.UserName);
-                RegistrationResponse = new ResponsetoSignUP(response);
-                obj1.DataSend<ResponsetoSignUP>(RegistrationResponse, ClientId, request);
-
-                clientEmail = obj1.ClientEmailID.Values.ToList();
-
-                List<UserStatus> UserLoginList = new List<UserStatus>();
-                for (int i = 0; i < clientEmail.Count; i++)
-                {
-                    UserStatus userEmail = new UserStatus();
-                    userEmail.EmailID = clientEmail[i];
-
-                    UserLoginList.Add(userEmail);
-                }
-
-                userLoginEmail = new LoginUser(UserLoginList);
-                obj1.DataSend<LoginUser>(userLoginEmail, ClientId, "Login User");
-
-            }
+           
             else if(request == "Send Message Request")
             {
                 userMessage = (RequestToSendMess)pp;
@@ -237,6 +224,9 @@ namespace ConsoleApp1
                 obj1.DataSend<ResponseOfHistoryMessages>(userhistorymessage, ClientId, request);
      
             }
+            
+
+
 
 
         }

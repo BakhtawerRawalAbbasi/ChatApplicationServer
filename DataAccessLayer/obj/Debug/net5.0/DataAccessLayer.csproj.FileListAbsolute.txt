@@ -9,4 +9,3 @@ C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\D
 C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.dll
 C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\ref\DataAccessLayer.dll
 C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.pdb
-C:\Users\bakhtawar\source\repos\Server_Socket\DataAccessLayer\obj\Debug\net5.0\DataAccessLayer.csproj.AssemblyReference.cache

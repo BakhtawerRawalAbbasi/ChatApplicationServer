@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    public class UserAuthentication
+    public class DataManipulation
     {
         SqlConnection sqlCon = new SqlConnection(@"Data Source=DEV-BAKHTAWAR; Initial Catalog=LoginDB;Integrated security=True;");
 
@@ -64,6 +64,7 @@ namespace DataAccessLayer
                 else
                 {
                     query = $"INSERT INTO tbl_User(UserName,EmailID,Password) VALUES('{userName}','{email}','{password}' )";
+                    sqlCmd = new SqlCommand(query, sqlCon);
                     sqlCmd.Parameters.AddWithValue("@UserName", userName);
                     sqlCmd.Parameters.AddWithValue("@Password", password);
                     sqlCmd.Parameters.AddWithValue("@EmailID", email);
